@@ -5,6 +5,7 @@ import logo from "./assets/logo.svg";
 import Home from "./Containers/Home";
 import Nowplaying from "./Containers/Nowplaying";
 import Upcoming from "./Containers/Upcoming";
+import Modal from "./Components/Modal";
 import "./App.css";
 
 const App = () => {
@@ -12,6 +13,10 @@ const App = () => {
   const [nowPlayingList, setNowPlayingList] = useState([]);
   const [upcomingList, setUpcomingList] = useState([]);
   const [page, setPage] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const [movieClicked, setMovieClicked] = useState({});
+
+  console.log(showModal);
 
   console.log(page);
 
@@ -38,6 +43,16 @@ const App = () => {
     fetchDataUp();
   }, [page]);
 
+  const remove = () => {
+    let newPlayingList = [...nowPlayingList];
+    newPlayingList.splice(0, newPlayingList.length);
+    setNowPlayingList(newPlayingList);
+    let newUplist = [...upcomingList];
+    newUplist.splice(0, newUplist.length);
+    setUpcomingList(newUplist);
+    setPage(1);
+  };
+
   return (
     <Router>
       <div className="App">
@@ -45,9 +60,21 @@ const App = () => {
           <p>En cours de chargement</p>
         ) : (
           <>
+            <Modal
+              showModal={showModal}
+              movieClicked={movieClicked}
+              setShowModal={setShowModal}
+            />
             <header className="App-header">
               <Link to="/">
-                <img src={logo} className="App-logo" alt="logo" />
+                <img
+                  src={logo}
+                  className="App-logo"
+                  alt="logo"
+                  onClick={() => {
+                    remove();
+                  }}
+                />
               </Link>
             </header>
             <Switch>
@@ -56,6 +83,9 @@ const App = () => {
                   page={page}
                   setPage={setPage}
                   nowPlayingList={nowPlayingList}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                  setMovieClicked={setMovieClicked}
                 />
               </Route>
               <Route path="/upcoming">
@@ -63,12 +93,18 @@ const App = () => {
                   page={page}
                   setPage={setPage}
                   upcomingList={upcomingList}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                  setMovieClicked={setMovieClicked}
                 />
               </Route>
               <Route path="/">
                 <Home
                   nowPlayingList={nowPlayingList}
                   upcomingList={upcomingList}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                  setMovieClicked={setMovieClicked}
                 />
               </Route>
             </Switch>

@@ -8,7 +8,14 @@ const Moviecard = props => {
     >
       {props.list.map((product, index) => {
         return (
-          <div className="movieCard" key={index}>
+          <div
+            className="movieCard"
+            key={index}
+            onClick={() => {
+              props.setShowModal(!props.showModal);
+              props.setMovieClicked(product);
+            }}
+          >
             <div className="poster">
               <img
                 src={

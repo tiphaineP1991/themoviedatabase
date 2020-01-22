@@ -1,7 +1,14 @@
 import React from "react";
 import MovieCard from "../Components/Moviecard";
 
-const Nowplaying = ({ page, setPage, nowPlayingList }) => {
+const Nowplaying = ({
+  page,
+  setPage,
+  nowPlayingList,
+  showModal,
+  setShowModal,
+  setMovieClicked
+}) => {
   const handleChange = e => {
     let element = e.target;
     if (element.scrollHeight - element.scrollTop === element.clientHeight) {
@@ -15,7 +22,13 @@ const Nowplaying = ({ page, setPage, nowPlayingList }) => {
       <div className="section-title">
         <p>{"All movies now playing"}</p>
       </div>
-      <MovieCard function={handleChange} list={nowPlayingList} />
+      <MovieCard
+        function={handleChange}
+        list={nowPlayingList}
+        showModal={showModal}
+        setShowModal={setShowModal}
+        setMovieClicked={setMovieClicked}
+      />
     </div>
   );
 };
