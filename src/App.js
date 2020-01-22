@@ -13,12 +13,14 @@ const App = () => {
   const [upcomingList, setUpcomingList] = useState([]);
   const [page, setPage] = useState(1);
 
+  console.log(page);
+
   const fetchDataNow = async () => {
     const response = await axios.get(
       "https://api.themoviedb.org/3/movie/now_playing?api_key=f6102bdcf50d58b04b50380aa65a1652&language=fr&page=" +
         page
     );
-    setNowPlayingList(response.data.results);
+    setNowPlayingList([...nowPlayingList, ...response.data.results]);
     setIsLoading(false);
   };
 
@@ -27,17 +29,13 @@ const App = () => {
       "https://api.themoviedb.org/3/movie/upcoming?api_key=f6102bdcf50d58b04b50380aa65a1652&language=en-US&page=" +
         page
     );
-    setUpcomingList(response.data.results);
+    setUpcomingList([...upcomingList, ...response.data.results]);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchDataNow();
     fetchDataUp();
-  }, []);
-
-  useEffect(() => {
-    console.log(page);
   }, [page]);
 
   return (
@@ -46,9 +44,11 @@ const App = () => {
         {isLoading === true ? (
           <p>En cours de chargement</p>
         ) : (
-          <div>
+          <>
             <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
+              <Link to="/">
+                <img src={logo} className="App-logo" alt="logo" />
+              </Link>
             </header>
             <Switch>
               <Route path="/nowplaying">
@@ -56,14 +56,12 @@ const App = () => {
                   page={page}
                   setPage={setPage}
                   nowPlayingList={nowPlayingList}
-                  upcomingList={upcomingList}
                 />
               </Route>
               <Route path="/upcoming">
                 <Upcoming
                   page={page}
                   setPage={setPage}
-                  nowPlayingList={nowPlayingList}
                   upcomingList={upcomingList}
                 />
               </Route>
@@ -74,7 +72,7 @@ const App = () => {
                 />
               </Route>
             </Switch>
-          </div>
+          </>
         )}
       </div>
     </Router>
